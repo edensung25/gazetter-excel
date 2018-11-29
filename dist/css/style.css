@@ -31,8 +31,8 @@ form input{
   position: absolute;
   margin: 0;
   padding: 0;
-  width: 100%;
-  height: 100%;
+  width: calc(100% - 50px);
+  height: calc(100% - 80px);
   outline: none;
   opacity: 0;
 }

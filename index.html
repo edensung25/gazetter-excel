@@ -4,7 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <title>Gazetteer Sheet Converter</title>
-    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="./dist/css/style.css" />
 </head>
 
@@ -12,16 +16,12 @@
     <div class="container">
         <div class="row">
             <div class="col-md-4 order-md-1 mb-4">
-                <div>
-                    <form class="form-upload" action="upload.php" method="POST">
-                        <input id="uploadfiles" type="file"  onchange="getFileData(this);" multiple>
-                        <p>Drag your files here or click in this area.</p>
-                        <button class="btn btn-secondary" type="submit">Upload</button>
-                    </form>
-                </div>
-                <div>
-
-                </div>
+                <form class="form-upload" action="#" method="GET">
+                    <input id="uploadfiles" type="file"  onchange="getFileData(this);" multiple>
+                    <p>Drag your files here or click in this area.</p>
+                    <button class="btn btn-secondary" type="submit">Upload</button>
+                </form>
+                <button class="btn btn-primary">Export</button>
             </div>
             <div class="col-md-8 order-md-1 mb-8 achievements-wrapper">
                 <table id="file-table" class="table">
@@ -65,6 +65,26 @@
         </div> -->
     </div>
 
+    <!-- Modal -->
+    <div class="modal fade" id="excel-viewer" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                <div class="modal-body">
+                ...
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 <script src="https://cdn.bootcss.com/vue/2.4.2/vue.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
@@ -85,9 +105,9 @@
     }
 
     function drawTable() {
-       for (var i = 0; i < files.length; i++) {
+        for (var i = 0; i < files.length; i++) {
            drawRow(files[i], i);
-       }
+        }
    }
 
    function drawRow(rowData, idx) {
@@ -95,13 +115,13 @@
        $('#file-table').append(row);
        row.append($("<td>" + rowData.name + "</td>"));
        row.append($("<td>" + parseFloat(Math.round(rowData.size / 1000)).toFixed(1) + "KB</td>"));
-       row.append($("<td><button type=\"button\" name=\"button\" onclick=\"deleteFile(this, "+idx+")\">view</button>"+
-                        "<button type=\"button\" name=\"button\" onclick=\"deleteFile(this, "+idx+")\">delete</button></td>"));
+       row.append($("<td><button type=\"button\" name=\"button\" data-toggle=\"modal\" data-target=\"#excel-viewer\">view</button>"+
+                        "<button type=\"button\" name=\"button\" onclick=\"deleteFile(this)\">delete</button></td>"));
    }
 
-   function deleteFile(btn, idx) {
-       files.splice(idx, 1);
+   function deleteFile(btn) {
        var row = btn.parentNode.parentNode;
+       files.splice(row.rowIndex-1, 1);
        row.parentNode.removeChild(row);
    }
 </script>
