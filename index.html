@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Gazetteer Sheet Converter</title>
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="./dist/css/style.css" />
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 order-md-1 mb-4">
+                <div>
+                    <form class="form-upload" action="upload.php" method="POST">
+                        <input id="uploadfiles" type="file"  onchange="getFileData(this);" multiple>
+                        <p>Drag your files here or click in this area.</p>
+                        <button class="btn btn-secondary" type="submit">Upload</button>
+                    </form>
+                </div>
+                <div>
+
+                </div>
+            </div>
+            <div class="col-md-8 order-md-1 mb-8 achievements-wrapper">
+                <table id="file-table" class="table">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Size</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody class="table-files">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- <div class="row">
+            <div class="col-md-12 mb-12">
+                <div id="app" v-cloak>
+                    <input type="file" @change="importExcel($event.target)" />
+                    <div style="overflow: auto;" v-if="tableTbody&&tableTbody.length>0">
+                        <table class="table table-bordered" style="min-width: 100%;">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th v-for="(item,index) in tableHeader" :key="index">
+                                        {{item}}
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="(row,index) in tableTbody" :key="index">
+                                    <th scope="row">{{index}}</th>
+                                    <td v-for="col in tableHeader">{{row[col]}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+    </div>
+
+</body>
+<script src="https://cdn.bootcss.com/vue/2.4.2/vue.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="./dist/js/xlsx.full.min.js"></script>
+<script src="./vue/formatter.js"></script>
+<!-- <script type="text/javascript">
+    var formatter = new formatter();
+</script> -->
+
+<script type="text/javascript">
+    var test = "123";
+    var files = [];
+    function getFileData(myFile) {
+        for (var i = 0 ; i < myFile.files.length ; i++) {
+            files.push(myFile.files[i]);
+        }
+        drawTable();
+    }
+
+    function drawTable() {
+       for (var i = 0; i < files.length; i++) {
+           drawRow(files[i], i);
+       }
+   }
+
+   function drawRow(rowData, idx) {
+       var row = $("<tr />")
+       $('#file-table').append(row);
+       row.append($("<td>" + rowData.name + "</td>"));
+       row.append($("<td>" + parseFloat(Math.round(rowData.size / 1000)).toFixed(1) + "KB</td>"));
+       row.append($("<td><button type=\"button\" name=\"button\" onclick=\"deleteFile(this, "+idx+")\">view</button>"+
+                        "<button type=\"button\" name=\"button\" onclick=\"deleteFile(this, "+idx+")\">delete</button></td>"));
+   }
+
+   function deleteFile(btn, idx) {
+       files.splice(idx, 1);
+       var row = btn.parentNode.parentNode;
+       row.parentNode.removeChild(row);
+   }
+</script>
+</html>
