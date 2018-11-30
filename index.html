@@ -19,9 +19,11 @@
                 <form class="form-upload" action="#" method="GET">
                     <input id="uploadfiles" type="file"  onchange="getFileData(this);" multiple>
                     <p>Drag your files here or click in this area.</p>
-                    <button class="btn btn-secondary" type="submit">Upload</button>
+                    <!-- <button class="btn btn-secondary" type="submit">Upload</button> -->
                 </form>
-                <button id="exportFiles" class="btn btn-primary">Export</button>
+                <div id="app" v-cloak>
+                    <button class="btn btn-primary" v-on:click="exportExcel">Export Files</button>
+                </div>
             </div>
             <div class="col-md-8 order-md-1 mb-8 achievements-wrapper">
                 <table id="file-table" class="table">
@@ -38,32 +40,6 @@
             </div>
         </div>
 
-        <div class="row">
-            <div class="col-md-12 mb-12">
-                <div id="app" v-cloak>
-                    <button v-on:click="exportExcel">Test</button>
-                    <!-- <input type="file" @change="importExcel($event.target)"/>
-                    <div style="overflow: auto;" v-if="tableTbody&&tableTbody.length>0">
-                        <table class="table table-bordered" style="min-width: 100%;">
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th v-for="(item,index) in tableHeader" :key="index">
-                                        {{item}}
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr v-for="(row,index) in tableTbody" :key="index">
-                                    <th scope="row">{{index}}</th>
-                                    <td v-for="col in tableHeader">{{row[col]}}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div> -->
-                </div>
-            </div>
-        </div>
     </div>
 
     <!-- Modal -->
@@ -125,8 +101,8 @@
        $('#file-table').append(row);
        row.append($("<td>" + rowData.name + "</td>"));
        row.append($("<td>" + parseFloat(Math.round(rowData.size / 1000)).toFixed(1) + "KB</td>"));
-       row.append($("<td><button type=\"button\" name=\"button\" data-toggle=\"modal\" data-target=\"#excel-viewer\">view</button>"+
-                        "<button type=\"button\" name=\"button\" onclick=\"deleteFile(this)\">delete</button></td>"));
+       row.append($("<td><button class=\"btn btn-info btn-sm\" type=\"button\" name=\"button\" data-toggle=\"modal\" data-target=\"#excel-viewer\">view</button>"+
+                        "<button class=\"btn btn-danger btn-sm\" type=\"button\" name=\"button\" onclick=\"deleteFile(this)\">delete</button></td>"));
    }
 
    function deleteFile(btn) {
@@ -134,9 +110,5 @@
        files.splice(row.rowIndex-1, 1);
        row.parentNode.removeChild(row);
    }
-
-   document.getElementById("exportFiles").onclick = function () {
-       console.log('Export');
-   };
 </script>
 </html>

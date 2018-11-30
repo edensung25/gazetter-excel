@@ -13,8 +13,6 @@ var app = new Vue({
             for ( idx = 0 ; idx<files.length ; idx++ ) {
                 this.file2Xce(files[idx]).then(tabJson => {
                     if (tabJson && tabJson.length > 0) {
-                        // this.tableHeader = Object.keys(tabJson[0]);
-                        // this.tableTbody = tabJson;
                         /* this line is only needed if you are not adding a script tag reference */
                         if(typeof XLSX == 'undefined') XLSX = require('xlsx');
 
