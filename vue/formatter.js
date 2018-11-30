@@ -4,13 +4,20 @@ var app = new Vue({
         return {
             wb: '',
             tableHeader: [],
-            tableTbody: []
+            tableTbody: [],
+            isAddPrefix: false,
+            prefixContent:"",
         }
     },
     methods: {
         exportExcel() {
-            console.log(files);
+            if (files.length == 0) {
+                alert("Please upload files.");
+                return;
+            }
             for ( idx = 0 ; idx<files.length ; idx++ ) {
+                /* Form a new file name */
+                var filename = (this.isAddPrefix)? this.prefixContent+files[idx].name : files[idx].name;
                 this.file2Xce(files[idx]).then(tabJson => {
                     if (tabJson && tabJson.length > 0) {
                         /* this line is only needed if you are not adding a script tag reference */
@@ -24,7 +31,7 @@ var app = new Vue({
                         XLSX.utils.book_append_sheet(wb, ws, "Form");
 
                         /* generate an XLSX file */
-                        XLSX.writeFile(wb, "sheetjs.xlsx");
+                        XLSX.writeFile(wb, filename);
                     }
                 });
             }

@@ -4,8 +4,6 @@
 }
 
 .form-upload {
-    margin-left: 10px;
-    margin-right: 10px;
     margin-bottom: 38px;
     border: 4px solid #f1f1f1;
 }
@@ -21,7 +19,7 @@ form input{
   position: absolute;
   margin: 0;
   padding: 0;
-  width: calc(100% - 50px);
+  width: calc(100% - 30px);
   /* height: calc(100% - 80px); */
   height: 194px;
   outline: none;
@@ -56,4 +54,12 @@ form button:active{
 
 .btn {
     margin-right: 4px;
+}
+
+.form-control {
+    margin-bottom: 12px;
+}
+
+label {
+    margin-top: 16px;
 }

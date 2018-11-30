@@ -19,10 +19,19 @@
                 <form class="form-upload" action="#" method="GET">
                     <input id="uploadfiles" type="file"  onchange="getFileData(this);" multiple>
                     <p>Drag your files here or click in this area.</p>
-                    <!-- <button class="btn btn-secondary" type="submit">Upload</button> -->
                 </form>
                 <div id="app" v-cloak>
-                    <button class="btn btn-primary" v-on:click="exportExcel">Export Files</button>
+                    <button class="btn btn-danger btn-block" onclick="clearAllFiles()">Delete All Files</button>
+                    <label for="addPrefix">Prefix:</label>
+                    <div class="input-group mb-3" id="addPrefix">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">
+                                <input v-model="isAddPrefix" type="checkbox" aria-label="Checkbox for following text input">
+                            </div>
+                        </div>
+                        <input v-model="prefixContent" type="text" class="form-control" aria-label="Text input with checkbox" placeholder="Enter file name prefix">
+                    </div>
+                    <button class="btn btn-primary btn-block" v-on:click="exportExcel">Export Files</button>
                 </div>
             </div>
             <div class="col-md-8 order-md-1 mb-8 achievements-wrapper">
@@ -94,21 +103,26 @@
         for (var i = 0; i < files.length; i++) {
            drawRow(files[i], i);
         }
-   }
+    }
 
-   function drawRow(rowData, idx) {
-       var row = $("<tr />")
-       $('#file-table').append(row);
-       row.append($("<td>" + rowData.name + "</td>"));
-       row.append($("<td>" + parseFloat(Math.round(rowData.size / 1000)).toFixed(1) + "KB</td>"));
-       row.append($("<td><button class=\"btn btn-info btn-sm\" type=\"button\" name=\"button\" data-toggle=\"modal\" data-target=\"#excel-viewer\">view</button>"+
+    function drawRow(rowData, idx) {
+        var row = $("<tr />")
+        $('#file-table').append(row);
+        row.append($("<td>" + rowData.name + "</td>"));
+        row.append($("<td>" + parseFloat(Math.round(rowData.size / 1000)).toFixed(1) + "KB</td>"));
+        row.append($("<td><button class=\"btn btn-info btn-sm\" type=\"button\" name=\"button\" data-toggle=\"modal\" data-target=\"#excel-viewer\">view</button>"+
                         "<button class=\"btn btn-danger btn-sm\" type=\"button\" name=\"button\" onclick=\"deleteFile(this)\">delete</button></td>"));
-   }
+    }
 
-   function deleteFile(btn) {
-       var row = btn.parentNode.parentNode;
+    function deleteFile(btn) {
+        var row = btn.parentNode.parentNode;
        files.splice(row.rowIndex-1, 1);
-       row.parentNode.removeChild(row);
-   }
+        row.parentNode.removeChild(row);
+    }
+
+    function clearAllFiles() {
+        files = [];
+        $("#file-table  tbody").remove();
+    }
 </script>
 </html>
