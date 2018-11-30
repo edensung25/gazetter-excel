@@ -21,7 +21,7 @@
                     <p>Drag your files here or click in this area.</p>
                     <button class="btn btn-secondary" type="submit">Upload</button>
                 </form>
-                <button class="btn btn-primary">Export</button>
+                <button id="exportFiles" class="btn btn-primary">Export</button>
             </div>
             <div class="col-md-8 order-md-1 mb-8 achievements-wrapper">
                 <table id="file-table" class="table">
@@ -38,10 +38,11 @@
             </div>
         </div>
 
-        <!-- <div class="row">
+        <div class="row">
             <div class="col-md-12 mb-12">
                 <div id="app" v-cloak>
-                    <input type="file" @change="importExcel($event.target)" />
+                    <button v-on:click="exportExcel">Test</button>
+                    <!-- <input type="file" @change="importExcel($event.target)"/>
                     <div style="overflow: auto;" v-if="tableTbody&&tableTbody.length>0">
                         <table class="table table-bordered" style="min-width: 100%;">
                             <thead>
@@ -59,10 +60,10 @@
                                 </tr>
                             </tbody>
                         </table>
-                    </div>
+                    </div> -->
                 </div>
             </div>
-        </div> -->
+        </div>
     </div>
 
     <!-- Modal -->
@@ -86,20 +87,29 @@
         </div>
     </div>
 </body>
-<script src="https://cdn.bootcss.com/vue/2.4.2/vue.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<!-- <script src="https://cdn.bootcss.com/vue/2.4.2/vue.min.js"></script> -->
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="./dist/js/xlsx.full.min.js"></script>
 <script src="./vue/formatter.js"></script>
-<!-- <script type="text/javascript">
-    var formatter = new formatter();
-</script> -->
-
 <script type="text/javascript">
-    var test = "123";
+    var formatter = new formatter();
+</script>
+<script type="text/javascript">
     var files = [];
     function getFileData(myFile) {
+        var notValidFile = "";
         for (var i = 0 ; i < myFile.files.length ; i++) {
-            files.push(myFile.files[i]);
+            let file = myFile.files[i],
+                types = file.name.split('.').pop(),
+                fileType = ["xlsx", "xlc", "xlm", "xls", "xlt", "xlw", "csv"].some(item => item === types);
+            if (!fileType) {
+                notValidFile = notValidFile + "\n" + file.name;
+            } else
+                files.push(myFile.files[i]);
+        }
+        if (notValidFile != "") {
+            alert(notValidFile+"\n cannot be converted.");
         }
         drawTable();
     }
@@ -124,5 +134,9 @@
        files.splice(row.rowIndex-1, 1);
        row.parentNode.removeChild(row);
    }
+
+   document.getElementById("exportFiles").onclick = function () {
+       console.log('Export');
+   };
 </script>
 </html>

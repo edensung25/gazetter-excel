@@ -8,6 +8,29 @@ var app = new Vue({
         }
     },
     methods: {
+        exportExcel() {
+            console.log(files);
+            for ( idx = 0 ; idx<files.length ; idx++ ) {
+                this.file2Xce(files[idx]).then(tabJson => {
+                    if (tabJson && tabJson.length > 0) {
+                        // this.tableHeader = Object.keys(tabJson[0]);
+                        // this.tableTbody = tabJson;
+                        /* this line is only needed if you are not adding a script tag reference */
+                        if(typeof XLSX == 'undefined') XLSX = require('xlsx');
+
+                        /* make the worksheet */
+                        var ws = XLSX.utils.json_to_sheet(tabJson);
+
+                        /* add to workbook */
+                        var wb = XLSX.utils.book_new();
+                        XLSX.utils.book_append_sheet(wb, ws, "Form");
+
+                        /* generate an XLSX file */
+                        XLSX.writeFile(wb, "sheetjs.xlsx");
+                    }
+                });
+            }
+        },
         importExcel(obj) {
             if (!obj.files) {
                 return;
