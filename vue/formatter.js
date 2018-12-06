@@ -16,22 +16,20 @@ var app = new Vue({
                 return;
             }
             for ( idx = 0 ; idx<files.length ; idx++ ) {
-                /* Form a new file name */
-                var filename = (this.isAddPrefix)? this.prefixContent+files[idx].name : files[idx].name;
                 this.file2Xce(files[idx]).then(tabJson => {
-                    if (tabJson && tabJson.length > 0) {
+                    if (tabJson['data'] && tabJson['data'].length > 0) {
+
                         /* this line is only needed if you are not adding a script tag reference */
                         if(typeof XLSX == 'undefined') XLSX = require('xlsx');
 
                         /* make the worksheet */
-                        var ws = XLSX.utils.json_to_sheet(tabJson);
-
+                        var ws = XLSX.utils.json_to_sheet([tabJson['data']], {skipHeader: 1});
                         /* add to workbook */
                         var wb = XLSX.utils.book_new();
-                        XLSX.utils.book_append_sheet(wb, ws, "Form");
+                        XLSX.utils.book_append_sheet(wb, ws, "No Header");//"Form"
 
                         /* generate an XLSX file */
-                        XLSX.writeFile(wb, filename);
+                        XLSX.writeFile(wb, tabJson['filename']);
                     }
                 });
             }
@@ -103,7 +101,10 @@ var app = new Vue({
                             }
                         }
                     }
-                    resolve(XLSX.utils.sheet_to_json(ws, {header: 1, raw: false, blankCell: false}));
+                    var json = {'data':XLSX.utils.sheet_to_json(ws, {header: 1, raw: false, blankCell: false}),
+                                'filename': file.name
+                                };
+                    resolve(json);
                 };
                 reader.readAsBinaryString(file);
             });
