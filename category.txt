@@ -1,0 +1,6 @@
+9//户数 Number of Households//男性人口 Male Population//女性人口 Female Population//流动人口/暂住人口 Migratory/Temporary Population//出生人数 Number of Births//自然出生率 Birth Rate (‰)//死亡人数 Number of Deaths//死亡率 Death Rate (‰)//迁入 - 男 Migration In - Male//迁入 - 女 Migration In - Female//迁入 - 总 Migration In - Total迁出 - 男 Migration Out - Male//迁出 - 女 Migration Out - Female//迁出 - 总 Migration Out - Total//知识青年迁出 Educated Youth - Migration Out//农转非 (人数) Agricultural to Non-Agricultural Hukou (Change of Residency Status) (number of people)//自然增长率 Natural Population Growth Rate (‰)//农转非 (户数) Agricultural to Non-Agricultural Hukou / Change of Residency Status (number of households)//总人口 Total Population//知识青年迁入 Educated Youth - Migration In
+10
+11
+12
+13
+14

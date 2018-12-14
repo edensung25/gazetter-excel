@@ -43,7 +43,7 @@
                             <th>Action</th>
                         </tr>
                     </thead>
-                    <tbody class="table-files">
+                    <tbody id="table-files">
                     </tbody>
                 </table>
             </div>
@@ -83,6 +83,7 @@
 <script type="text/javascript">
     var files = [];
     function getFileData(myFile) {
+        console.log("before:"+myFile.files.length);
         var notValidFile = "";
         for (var i = 0 ; i < myFile.files.length ; i++) {
             let file = myFile.files[i],
@@ -96,7 +97,13 @@
         if (notValidFile != "") {
             alert(notValidFile+"\n cannot be converted.");
         }
+        $("#file-table tbody").remove();
         drawTable();
+
+        // var $el = $('#uploadfiles');
+        // $el.wrap('<form>').closest('form').get(0).reset();
+        // $el.unwrap();
+        // console.log("after:"+myFile.files.length);
     }
 
     function drawTable() {
@@ -114,15 +121,23 @@
                         "<button class=\"btn btn-danger btn-sm\" type=\"button\" name=\"button\" onclick=\"deleteFile(this)\">delete</button></td>"));
     }
 
+    function clearTable() {
+        console.log('12feaf');
+        $("#table-files").html("");
+    }
+
     function deleteFile(btn) {
+        console.log("delete file");
         var row = btn.parentNode.parentNode;
        files.splice(row.rowIndex-1, 1);
         row.parentNode.removeChild(row);
     }
 
     function clearAllFiles() {
-        files = [];
-        $("#file-table  tbody").remove();
+        console.log("clear");
+        files.length = 0;
+        // $("#file-table tbody").remove();
+        clearTable();
     }
 </script>
 </html>
