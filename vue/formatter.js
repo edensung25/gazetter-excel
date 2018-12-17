@@ -7,7 +7,81 @@ var app = new Vue({
             tableTbody: [],
             isAddPrefix: false,
             prefixContent:"",
-            cate9: ['户数 Number of Households','男性人口 Male Population','女性人口 Female Population','流动人口/暂住人口 Migratory/Temporary Population','出生人数 Number of Births','自然出生率 Birth Rate (‰)','死亡人数 Number of Deaths','死亡率 Death Rate (‰)','迁入 - 男 Migration In - Male','迁入 - 女 Migration In - Female','迁入 - 总 Migration In - Total','迁出 - 男 Migration Out - Male','迁出 - 女 Migration Out - Female','迁出 - 总 Migration Out - Total','知识青年迁出 Educated Youth - Migration Out','农转非 (人数) Agricultural to Non-Agricultural Hukou (Change of Residency Status) (number of people)','自然增长率 Natural Population Growth Rate (‰)','农转非 (户数) Agricultural to Non-Agricultural Hukou / Change of Residency Status (number of households)','总人口 Total Population','知识青年迁入 Educated Youth - Migration In']
+            cate9: ['户数 Number of Households',
+                    '男性人口 Male Population',
+                    '女性人口 Female Population',
+                    '总人口 Total Population',
+                    '流动人口/暂住人口 Migratory/Temporary Population',
+                    '出生人数 Number of Births',
+                    '自然出生率 Birth Rate (‰)',
+                    '死亡人数 Number of Deaths',
+                    '死亡率 Death Rate (‰)',
+                    '自然增长率 Natural Population Growth Rate (‰)',
+                    '迁入 (户数) Migration In (number of households)',
+                    '迁出 (户数) Migration Out (number of households)',
+                    '知识青年迁入 Educated Youth - Migration In',
+                    '知识青年迁出 Educated Youth - Migration Out',
+                    '农转非 (人数) Agricultural to Non-Agricultural Hukou / Change of Residency Status (number of people)',
+                    '农转非 (户数) Agricultural to Non-Agricultural Hukou / Change of Residency Status (number of households)'],
+            cate10: ['入伍 Military Enlistment',
+                     '村民纠纷 Number of Civil Mediations',
+                     '刑事案件 Number of Reported Crimes',
+                     '共产党员 - 男 CCP Membership - Male',
+                     '共产党员 - 女 CCP Membership - Female',
+                     '共产党员 - 总 CCP Membership - Total',
+                     '共产党员 - 少数民族 CCP Membership - Ethnic Minorities',
+                     '新党员 - 男 New CCP Membership - Male',
+                     '新党员 - 女 New CCP Membership - Female',
+                     '新党员 - 总 New CCP Membership - Total',
+                     '新党员 - 少数民族 New CCP Membership - Ethnic Minorities',
+                     '阶级成分 - 地主 (户数) Class Status - Landlord (number of households)',
+                     '阶级成分 - 富农 (户数) Class Status - Rich Peasant (number of households)',
+                     '阶级成分 - 中农 (户数) Class Status - Middle Peasant (number of households)',
+                     '阶级成分 - 贫下中农 (户数) Class Status - Poor and Lower Middle Peasant (number of households)'],
+            cate11: ['总产值 (万元) Gross Output Value (10K yuan)',
+                     '集体经济收入 (元) Collective Economic Income (yuan)',
+                     '集体经济收入 (万元) Collective Economic Income (10K yuan)',
+                     '耕地面积 (亩) Cultivated Area (mu)',
+                     '耕地面积 (公顷) Cultivated Area (hectares)',
+                     '粮食总产量 (万斤) Total Grain Output (10K pounds)',
+                     '粮食总产量 (吨) Total Grain Output (tons)',
+                     '粮食总产量 (万吨) Total Grain Output (10K tons)',
+                     '用电量 - 每人 (度) Village Power Consumption - per person (kilowatt-hours)',
+                     '用电量 - 每户 (度) Village Power Consumption - per household (kilowatt-hours)',
+                     '用电量 - 全村 (度) Village Power Consumption - Village (kilowatt-hours)',
+                     '电价 (元每度) Electricity Price - General (yuan per kilowatt-hour)',
+                     '电价 - 生活用电 (元每度) Electricity Price - Domestic (yuan per kilowatt-hour)',
+                     '电价 - 农业用电 (元每度) Electricity Price - Agricultural (yuan per kilowatt-hour)',
+                     '电价 - 工业用电 (元每度) Electricity Price - Industrial (yuan per kilowatt-hour)',
+                     '水价 (元每立方米) Water Price (yuan per cubic meter)',
+                     '人均收入 (元) Per Capita Income (yuan)',
+                     '人均居住面积 (平方米) Per Capita Living Space (square meters)'],
+            cate12: ['计划生育参与率 Family Planning Program Participation Rate (%)',
+                     '领取独生子女证 (人数) Certified Commitment to One Child Policy (number of people)',
+                     '育龄妇女人口 Number of Women of Childbearing Age',
+                     '生育率 Total Fertility Rate (‰)',
+                     '男性结扎 Vasectomies',
+                     '女性结扎 Tubal Ligations',
+                     '上环 Use of Intrauterine Device (IUD)',
+                     '绝育手术 Sterilization Surgeries'],
+            cate13: ['在校生 - 小学 Students in School - Elementary School',
+                     '在校生 - 初中 Students in School - Junior High School',
+                     '在校生 - 高中 Students in School - High School',
+                     '新入学生 - 大学 Initial Student Enrollment - College/University',
+                     '老师- 小学 Teachers - Elementary School',
+                     '老师- 初中 Teachers - Junior High School',
+                     '老师- 高中 Teachers - High School',
+                     '受教育程度 - 文盲 Illiterate',
+                     '受教育程度 - 小学 Highest Level of Education - Elementary School',
+                     '受教育程度 - 初中 Highest Level of Education - Junior High School',
+                     '受教育程度 - 中专高中 Highest Level of Education - High School',
+                     '受教育程度 - 大专以上 Highest Level of Education - College/University or Higher'],
+            cate14: ['视力残疾 Blindness',
+                     '听力语言残疾 Hearing and Speech Disabilities',
+                     '肢体残疾 Amputation and/or Paralysis',
+                     '精神残疾 Mental Disabilities',
+                     '智力残疾 Intellectual Disabilities',
+                     '残疾人总数 Total Disabled Population'],
         }
     },
     methods: {
@@ -17,9 +91,35 @@ var app = new Vue({
                 return;
             }
             for ( idx = 0 ; idx<files.length ; idx++ ) {
+                var category;
+                console.log(files[idx].name.substring(5, files[idx].name.indexOf('.')));
+                switch (files[idx].name.substring(5, files[idx].name.indexOf('.'))) {
+                    case '9':
+                        category = this.cate9;
+                        break;
+                    case '10':
+                        category = this.cate10;
+                        break;
+                    case '11':
+                        category = this.cate11;
+                        break;
+                    case '12':
+                        category = this.cate12;
+                        break;
+                    case '13':
+                        category = this.cate13;
+                        break;
+                    case '14':
+                        category = this.cate14;
+                        break;
+                    default:
+                        alert('Cannot find this category.');
+                        return;
+                }
                 /* Form a new file name */
                 var filename = (this.isAddPrefix)? this.prefixContent+files[idx].name : files[idx].name;
-                this.file2Xce(files[idx], filename, this.cate9).then(tabJson => {
+                this.file2Xce(files[idx], filename, category).then(tabJson => {
+                    console.log(tabJson);
                     if (tabJson['data'] && tabJson['data'].length > 0) {
                         /* this line is only needed if you are not adding a script tag reference */
                         if(typeof XLSX == 'undefined') XLSX = require('xlsx');
@@ -68,10 +168,10 @@ var app = new Vue({
                     var ws = this.wb.Sheets[this.wb.SheetNames[0]];
                     var range = XLSX.utils.decode_range(ws['!ref']);
                     var colNum, rowNum;
-
+                    console.log(cate);
                     // Get year range and the 'Is the data available?'
                     var yearRange = {'begin': null, 'end': null};
-                    var isAvailableCol, categoryCol, codeCol;
+                    var isAvailableCol, categoryCol, codeCol, titleCol;
                     for (colNum = range.s.c; colNum <= range.e.c; colNum++) {
                         var cell = ws[ XLSX.utils.encode_cell({r: 0, c: colNum}) ];
                         if (cell.w.length == 4 && !isNaN(cell.w)) {
@@ -90,6 +190,8 @@ var app = new Vue({
                             categoryCol = colNum;
                         } else if (cell.w == '村志代码 Gazetteer Code') {
                             codeCol = colNum;
+                        } else if (cell.w == '村志书名 Gazetteer Title') {
+                            titleCol = colNum;
                         }
                     }
 
@@ -97,20 +199,28 @@ var app = new Vue({
                     var tempCate = Array.from(cate);
                     for (rowNum = 1; rowNum <= range.e.r; rowNum++) {
                          var cellCategory = ws[ XLSX.utils.encode_cell({r: rowNum, c: categoryCol})].w;
+                         // For category 9
+                         if (cellCategory == '农转非 (人数) Agricultural to Non-Agricultural Hukou (Change of Residency Status) (number of people)')
+                            cellCategory = '农转非 (人数) Agricultural to Non-Agricultural Hukou / Change of Residency Status (number of people)';
+                        else if (cellCategory == '耕地面积 (平方米) Cultivated Area (square meters)')
+                            cellCategory = '耕地面积 (公顷) Cultivated Area (hectares)';
+                        else if (cellCategory == '上环 Use of Interuterine Device (IUD)')
+                            cellCategory = '上环 Use of Intrauterine Device (IUD)';
                          var cellCode = ws[ XLSX.utils.encode_cell({r: rowNum, c: codeCol})].w;
+                         var cellTitle = ws[ XLSX.utils.encode_cell({r: rowNum, c: titleCol})].w;
                          var cur_code = cellCode;
                          var index = tempCate.indexOf(cellCategory);
-                         console.log("code: "+cellCode+" category: " +cellCategory+ " index: "+index);
+                         // console.log("code: "+cellCode+" category: " +cellCategory+ " index: "+index);
                          if (index >= 0) {
                              var isRefNextRow = false;
-                             var obj = { "title":cellCategory, "row": rowNum};
+                             var obj = { "code": cellCode, "title": cellTitle, "category": cellCategory, "row": rowNum};
                              group.push(obj);
                              tempCate.splice(index, 1);
                              if (rowNum+1<=range.e.r)
                                 isRefNextRow = (cur_code ==  ws[ XLSX.utils.encode_cell({r: rowNum+1, c: codeCol})].w)?false:true;
                              if (rowNum == range.e.r || isRefNextRow) {
                                  for ( i = 0 ; i < tempCate.length ; i++ ) {
-                                     var obj = { "title":tempCate[i], "row": -1};
+                                     var obj = { "code": cellCode, "title": cellTitle, "category": tempCate[i], "row": -1};
                                      group.push(obj);
                                  }
                                  groups.push(group);
@@ -120,31 +230,40 @@ var app = new Vue({
                          }
                     }
                     console.log(groups);
-                    // // Insert new cells into table
-                    // if (yearRange.begin != null) {
-                    //     var id;
-                    //     for(rowNum = 1; rowNum <= range.e.r; rowNum++) {
-                    //         var isAvailable = false;
-                    //         for(colNum  = yearRange.begin; colNum <= yearRange.end; colNum++) {
-                    //             var cell = ws[ XLSX.utils.encode_cell({r: rowNum, c: colNum}) ];
-                    //             if (cell === undefined) {
-                    //                 var str;
-                    //                 if (colNum <= range.e.c) {
-                    //                     str = 'n/a';
-                    //                 }
-                    //                 var cell = {t:'s', v: str, r: '<t>'+str+'</t>', w: str};
-                    //                 ws[ XLSX.utils.encode_cell({r: rowNum, c: colNum}) ] = cell;
-                    //             } else {
-                    //                 if ( colNum >= yearRange.begin && colNum <= yearRange.end && !isAvailable) {isAvailable = true;}
-                    //                 continue;
-                    //             }
-                    //         }
-                    //         var str = (isAvailable) ? 'Yes': 'No';
-                    //         var cell = {t:'s', v: str, r: '<t>'+str+'</t>', w: str};
-                    //         ws[ XLSX.utils.encode_cell({r: rowNum, c: isAvailableCol}) ] = cell;
-                    //     }
-                    // }
-                    var result = {'data':XLSX.utils.sheet_to_json(ws, {header: 1, raw: false, blankCell: false}), 'filename': name};
+
+                    var content = new Array();
+                    var header = new Array();
+                    for(colNum  = codeCol; colNum <= yearRange.end; colNum++) {
+                        header.push(ws[ XLSX.utils.encode_cell({r: 0, c: colNum}) ]);
+                    }
+                    content.push(header);
+                    for ( i = 0 ; i < groups.length ; i++ ) {
+                        var rowContent = new Array();
+                        var isAvailable = false;
+                        for ( j = 0; j < groups[i].length; j++) {
+                            rowContent.push(groups[i][j]['code']);
+                            rowContent.push(groups[i][j]['title']);
+                            rowContent.push(groups[i][j]['category']);
+                            for(colNum  = yearRange.begin; colNum <= yearRange.end; colNum++) {
+                                if (groups[i][j]['row'] > -1) {
+                                    var cell = ws[ XLSX.utils.encode_cell({r: groups[i][j]['row'], c: colNum}) ];
+                                    if (cell === undefined) {
+                                        rowContent.push('n/a');
+                                    } else {
+                                        if (!isAvailable) {isAvailable = true;}
+                                        rowContent.push(cell.w);
+                                    }
+                                } else {
+                                    rowContent.push('n/a');
+                                }
+                            }
+                            rowContent.splice(3,0, (isAvailable)?'Yes':'No');
+                            content.push(Array.from(rowContent));
+                            rowContent.length = 0;
+                            isAvailable = false;
+                        }
+                    }
+                    var result = {'data': content, 'filename': name};
                     resolve(result);
                 };
                 reader.readAsBinaryString(file);
