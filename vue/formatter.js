@@ -195,58 +195,78 @@ var app = new Vue({
                         }
                     }
 
-                    var groups = new Array(), group = new Array();
-                    var tempCate = Array.from(cate);
-                    for (rowNum = 1; rowNum <= range.e.r; rowNum++) {
-                         var cellCategory = ws[ XLSX.utils.encode_cell({r: rowNum, c: categoryCol})].w;
-                         // For category 9
-                         if (cellCategory == '农转非 (人数) Agricultural to Non-Agricultural Hukou (Change of Residency Status) (number of people)')
-                            cellCategory = '农转非 (人数) Agricultural to Non-Agricultural Hukou / Change of Residency Status (number of people)';
-                        else if (cellCategory == '耕地面积 (平方米) Cultivated Area (square meters)')
-                            cellCategory = '耕地面积 (公顷) Cultivated Area (hectares)';
-                        else if (cellCategory == '上环 Use of Interuterine Device (IUD)')
-                            cellCategory = '上环 Use of Intrauterine Device (IUD)';
-                         var cellCode = ws[ XLSX.utils.encode_cell({r: rowNum, c: codeCol})].w;
-                         var cellTitle = ws[ XLSX.utils.encode_cell({r: rowNum, c: titleCol})].w;
-                         var cur_code = cellCode;
-                         var index = tempCate.indexOf(cellCategory);
-                         // console.log("code: "+cellCode+" category: " +cellCategory+ " index: "+index);
-                         if (index >= 0) {
-                             var isRefNextRow = false;
-                             var obj = { "code": cellCode, "title": cellTitle, "category": cellCategory, "row": rowNum};
-                             group.push(obj);
-                             tempCate.splice(index, 1);
-                             if (rowNum+1<=range.e.r)
-                                isRefNextRow = (cur_code ==  ws[ XLSX.utils.encode_cell({r: rowNum+1, c: codeCol})].w)?false:true;
-                             if (rowNum == range.e.r || isRefNextRow) {
-                                 for ( i = 0 ; i < tempCate.length ; i++ ) {
-                                     var obj = { "code": cellCode, "title": cellTitle, "category": tempCate[i], "row": -1};
-                                     group.push(obj);
-                                 }
-                                 groups.push(group);
-                                 tempCate = Array.from(cate);
-                                 group = [];
-                             }
-                         }
-                    }
-                    console.log(groups);
-
+                    // Create Header
                     var content = new Array();
                     var header = new Array();
                     for(colNum  = codeCol; colNum <= yearRange.end; colNum++) {
                         header.push(ws[ XLSX.utils.encode_cell({r: 0, c: colNum}) ]);
                     }
                     content.push(header);
-                    for ( i = 0 ; i < groups.length ; i++ ) {
+
+                    // Rename category and get contents of code, title, category
+                    var groups = {};
+                    for (rowNum = 1; rowNum <= range.e.r; rowNum++) {
+                        var cellCode = ws[ XLSX.utils.encode_cell({r: rowNum, c: codeCol})].w;
+                        var cellTitle = ws[ XLSX.utils.encode_cell({r: rowNum, c: titleCol})].w;
+                        var cellCategory = ws[ XLSX.utils.encode_cell({r: rowNum, c: categoryCol})].w;
+                        // For rename
+                        if (cellCategory == '农转非 (人数) Agricultural to Non-Agricultural Hukou (Change of Residency Status) (number of people)')
+                            cellCategory = '农转非 (人数) Agricultural to Non-Agricultural Hukou / Change of Residency Status (number of people)';
+                        else if (cellCategory == '耕地面积 (平方米) Cultivated Area (square meters)')
+                            cellCategory = '耕地面积 (公顷) Cultivated Area (hectares)';
+                        else if (cellCategory == '上环 Use of Interuterine Device (IUD)')
+                            cellCategory = '上环 Use of Intrauterine Device (IUD)';
+
+                        if (groups[cellCode] == null) {
+                            groups[cellCode] = new Array();
+                        }
+                        groups[cellCode].push({'row': rowNum, 'title': cellTitle, 'category': cellCategory});
+                    }
+
+                    // Compare with the default category list remove unwanted rows and insert non-existed row from default category
+                    for (var code in groups) {
+                        var tempCate = Array.from(cate);
+                        var delArr = new Array();
+                        for (var i = 0; i < groups[code].length; i++) {
+                            var obj = groups[code][i];
+                            var index = tempCate.indexOf(obj['category']);
+                            if (index >= 0) {
+                                tempCate.splice(index, 1);
+                            } else {
+                                delArr.push(i);
+                            }
+                        }
+                        console.log("delete:"+ delArr);
+                        if (delArr.length > 0 ) {
+                            for (var i = delArr.length-1; i >= 0 ; i--) {
+                                //groups[code].splice(delArr[i], 1);//
+                                delete groups[code][delArr[i]];
+                            }
+                        }
+                        if (tempCate.length > 0) {
+                            for (var j = 0; j < tempCate.length; j++) {
+                                groups[code].push({'row': -1, 'title': groups[code][0]['title'], 'category': tempCate[j]});
+                            }
+                        }
+                        for (variable of groups[code]) {
+                            console.log(JSON.stringify(variable));
+                        }
+                    }
+
+                    for (var code in groups) {
+                        var counter = 0;
+                        console.log(groups[code]);
                         var rowContent = new Array();
                         var isAvailable = false;
-                        for ( j = 0; j < groups[i].length; j++) {
-                            rowContent.push(groups[i][j]['code']);
-                            rowContent.push(groups[i][j]['title']);
-                            rowContent.push(groups[i][j]['category']);
-                            for(colNum  = yearRange.begin; colNum <= yearRange.end; colNum++) {
-                                if (groups[i][j]['row'] > -1) {
-                                    var cell = ws[ XLSX.utils.encode_cell({r: groups[i][j]['row'], c: colNum}) ];
+                        for (obj of groups[code]) {
+                            if (obj == undefined) continue;
+                            rowContent.push(code);
+                            rowContent.push(obj['title']);
+                            rowContent.push(obj['category']);
+
+                            for(colNum = yearRange.begin; colNum <= yearRange.end; colNum++) {
+                                if (obj['row'] > -1) {
+                                    var cell = ws[ XLSX.utils.encode_cell({r: obj['row'], c: colNum}) ];
                                     if (cell === undefined) {
                                         rowContent.push('n/a');
                                     } else {
@@ -257,12 +277,15 @@ var app = new Vue({
                                     rowContent.push('n/a');
                                 }
                             }
+                            counter++;
                             rowContent.splice(3,0, (isAvailable)?'Yes':'No');
                             content.push(Array.from(rowContent));
                             rowContent.length = 0;
                             isAvailable = false;
                         }
+                        console.log("counter: "+counter);
                     }
+                    console.log(groups.length);
                     var result = {'data': content, 'filename': name};
                     resolve(result);
                 };
