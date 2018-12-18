@@ -170,6 +170,7 @@ var app = new Vue({
                     var colNum, rowNum;
                     console.log(cate);
                     // Get year range and the 'Is the data available?'
+                    var mode = (name.indexOf('Range') > 0) ? 'range' : 'yearly';
                     var yearRange = {'begin': null, 'end': null};
                     var isAvailableCol, categoryCol, codeCol, titleCol;
                     for (colNum = range.s.c; colNum <= range.e.c; colNum++) {
@@ -232,6 +233,11 @@ var app = new Vue({
                             var index = tempCate.indexOf(obj['category']);
                             if (index >= 0) {
                                 tempCate.splice(index, 1);
+                            } else if (index == -1 && cate.indexOf(obj['category']) >= 0 && mode == 'range') {
+                                // TOOD: double check here
+                                if (ws[ XLSX.utils.encode_cell({r: obj['row'], c: yearRange.begin})] == undefined) {
+                                    delArr.push(i);
+                                }
                             } else {
                                 delArr.push(i);
                             }
@@ -239,7 +245,6 @@ var app = new Vue({
                         console.log("delete:"+ delArr);
                         if (delArr.length > 0 ) {
                             for (var i = delArr.length-1; i >= 0 ; i--) {
-                                //groups[code].splice(delArr[i], 1);//
                                 delete groups[code][delArr[i]];
                             }
                         }
@@ -253,6 +258,7 @@ var app = new Vue({
                         }
                     }
 
+                    // Generating the excel content
                     for (var code in groups) {
                         var counter = 0;
                         console.log(groups[code]);
