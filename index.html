@@ -6,7 +6,7 @@
     <title>Gazetteer Sheet Converter</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="./dist/css/style.css" />
@@ -43,7 +43,7 @@
                             <th>Action</th>
                         </tr>
                     </thead>
-                    <tbody id="table-files">
+                    <tbody>
                     </tbody>
                 </table>
             </div>
@@ -74,7 +74,7 @@
 </body>
 <script src="https://cdn.jsdelivr.net/npm/vue"></script>
 <!-- <script src="https://cdn.bootcss.com/vue/2.4.2/vue.min.js"></script> -->
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+
 <script src="./dist/js/xlsx.full.min.js"></script>
 <script src="./vue/formatter.js"></script>
 <script type="text/javascript">
@@ -97,16 +97,11 @@
         if (notValidFile != "") {
             alert(notValidFile+"\n cannot be converted.");
         }
-        $("#file-table tbody").remove();
         drawTable();
-
-        // var $el = $('#uploadfiles');
-        // $el.wrap('<form>').closest('form').get(0).reset();
-        // $el.unwrap();
-        // console.log("after:"+myFile.files.length);
     }
 
     function drawTable() {
+        clearTable();
         for (var i = 0; i < files.length; i++) {
            drawRow(files[i], i);
         }
@@ -122,21 +117,17 @@
     }
 
     function clearTable() {
-        console.log('12feaf');
-        $("#table-files").html("");
+        $("#file-table tbody").remove();
     }
 
     function deleteFile(btn) {
-        console.log("delete file");
         var row = btn.parentNode.parentNode;
-       files.splice(row.rowIndex-1, 1);
+        files.splice(row.rowIndex-1, 1);
         row.parentNode.removeChild(row);
     }
 
     function clearAllFiles() {
-        console.log("clear");
         files.length = 0;
-        // $("#file-table tbody").remove();
         clearTable();
     }
 </script>

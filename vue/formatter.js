@@ -210,7 +210,7 @@ var app = new Vue({
                         var cellCode = ws[ XLSX.utils.encode_cell({r: rowNum, c: codeCol})].w;
                         var cellTitle = ws[ XLSX.utils.encode_cell({r: rowNum, c: titleCol})].w;
                         var cellCategory = ws[ XLSX.utils.encode_cell({r: rowNum, c: categoryCol})].w;
-                        // For rename
+                        // Rename the category
                         if (cellCategory == '农转非 (人数) Agricultural to Non-Agricultural Hukou (Change of Residency Status) (number of people)')
                             cellCategory = '农转非 (人数) Agricultural to Non-Agricultural Hukou / Change of Residency Status (number of people)';
                         else if (cellCategory == '耕地面积 (平方米) Cultivated Area (square meters)')
