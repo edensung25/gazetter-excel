@@ -5,8 +5,6 @@
     <meta charset="UTF-8">
     <title>Gazetteer Sheet Converter</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-
-    <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="./dist/css/style.css" />
@@ -14,28 +12,26 @@
 
 <body>
     <div class="container">
-        <div class="row">
-            <div class="col-md-4 order-md-1 mb-4">
+        <div id="app" class="row" v-cloak>
+            <div class="col-md-4 mb-4">
                 <form class="form-upload" action="#" method="GET">
-                    <input id="uploadfiles" type="file"  onchange="getFileData(this);" multiple>
+                    <input type="file" @change="loadTextFromFile" multiple>
                     <p>Drag your files here or click in this area.</p>
                 </form>
-                <div id="app" v-cloak>
-                    <button class="btn btn-danger btn-block" onclick="clearAllFiles()">Delete All Files</button>
-                    <label for="addPrefix">Prefix:</label>
-                    <div class="input-group mb-3" id="addPrefix">
-                        <div class="input-group-prepend">
-                            <div class="input-group-text">
-                                <input v-model="isAddPrefix" type="checkbox" aria-label="Checkbox for following text input">
-                            </div>
+                <button class="btn btn-danger btn-block" @click="clearFileArr">Delete All Files</button>
+                <label for="addPrefix">Prefix:</label>
+                <div class="input-group mb-3" id="addPrefix">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">
+                            <input v-model="isAddPrefix" type="checkbox" aria-label="Checkbox for following text input">
                         </div>
-                        <input v-model="prefixContent" type="text" class="form-control" aria-label="Text input with checkbox" placeholder="Enter file name prefix">
                     </div>
-                    <button class="btn btn-primary btn-block" v-on:click="exportExcel">Export Files</button>
+                    <input v-model="prefixContent" type="text" class="form-control" aria-label="Text input with checkbox" placeholder="Enter file name prefix">
                 </div>
+                <button class="btn btn-primary btn-block" v-on:click="exportExcel">Export Files</button>
             </div>
-            <div class="col-md-8 order-md-1 mb-8 achievements-wrapper">
-                <table id="file-table" class="table">
+            <div class="col-md-8 mb-8">
+                <table class="table">
                     <thead>
                         <tr>
                             <th>Title</th>
@@ -44,91 +40,23 @@
                         </tr>
                     </thead>
                     <tbody>
+                        <template v-for="(file, index) in fileArr">
+                            <tr>
+                                <td>{{file.name}}</td>
+                                <td>{{parseFloat(Math.round(file.size / 1000)).toFixed(0)}} KB</td>
+                                <td><button class="btn btn-danger btn-sm" type="button" name="button" @click="deleteFile(index)">Delete</button></td>
+                            </tr>
+                        </template>
                     </tbody>
                 </table>
-            </div>
-        </div>
-
-    </div>
-
-    <!-- Modal -->
-    <div class="modal fade" id="excel-viewer" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                </div>
-                <div class="modal-body">
-                ...
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
-                </div>
             </div>
         </div>
     </div>
 </body>
 <script src="https://cdn.jsdelivr.net/npm/vue"></script>
-<!-- <script src="https://cdn.bootcss.com/vue/2.4.2/vue.min.js"></script> -->
-
 <script src="./dist/js/xlsx.full.min.js"></script>
 <script src="./vue/formatter.js"></script>
 <script type="text/javascript">
     var formatter = new formatter();
-</script>
-<script type="text/javascript">
-    var files = [];
-    function getFileData(myFile) {
-        console.log("before:"+myFile.files.length);
-        var notValidFile = "";
-        for (var i = 0 ; i < myFile.files.length ; i++) {
-            let file = myFile.files[i],
-                types = file.name.split('.').pop(),
-                fileType = ["xlsx", "xlc", "xlm", "xls", "xlt", "xlw", "csv"].some(item => item === types);
-            if (!fileType) {
-                notValidFile = notValidFile + "\n" + file.name;
-            } else
-                files.push(myFile.files[i]);
-        }
-        if (notValidFile != "") {
-            alert(notValidFile+"\n cannot be converted.");
-        }
-        drawTable();
-    }
-
-    function drawTable() {
-        clearTable();
-        for (var i = 0; i < files.length; i++) {
-           drawRow(files[i], i);
-        }
-    }
-
-    function drawRow(rowData, idx) {
-        var row = $("<tr />")
-        $('#file-table').append(row);
-        row.append($("<td>" + rowData.name + "</td>"));
-        row.append($("<td>" + parseFloat(Math.round(rowData.size / 1000)).toFixed(1) + "KB</td>"));
-        row.append($("<td><button class=\"btn btn-info btn-sm\" type=\"button\" name=\"button\" data-toggle=\"modal\" data-target=\"#excel-viewer\">view</button>"+
-                        "<button class=\"btn btn-danger btn-sm\" type=\"button\" name=\"button\" onclick=\"deleteFile(this)\">delete</button></td>"));
-    }
-
-    function clearTable() {
-        $("#file-table tbody").remove();
-    }
-
-    function deleteFile(btn) {
-        var row = btn.parentNode.parentNode;
-        files.splice(row.rowIndex-1, 1);
-        row.parentNode.removeChild(row);
-    }
-
-    function clearAllFiles() {
-        files.length = 0;
-        clearTable();
-    }
 </script>
 </html>

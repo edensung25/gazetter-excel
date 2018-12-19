@@ -6,6 +6,13 @@ var app = new Vue({
             tableHeader: [],
             tableTbody: [],
             isAddPrefix: false,
+            fileArr: [],
+            items:  [
+                      { isActive: true, age: 40, first_name: 'Dickerson', last_name: 'Macdonald' },
+                      { isActive: false, age: 21, first_name: 'Larsen', last_name: 'Shaw' },
+                      { isActive: false, age: 89, first_name: 'Geneva', last_name: 'Wilson' },
+                      { isActive: true, age: 38, first_name: 'Jami', last_name: 'Carney' }
+                    ],
             prefixContent:"",
             cate9: ['户数 Number of Households',
                     '男性人口 Male Population',
@@ -86,14 +93,14 @@ var app = new Vue({
     },
     methods: {
         exportExcel() {
-            if (files.length == 0) {
+            if (this.fileArr.length == 0) {
                 alert("Please upload files.");
                 return;
             }
-            for ( idx = 0 ; idx<files.length ; idx++ ) {
+            for ( idx = 0 ; idx<this.fileArr.length ; idx++ ) {
                 var category;
-                console.log(files[idx].name.substring(5, files[idx].name.indexOf('.')));
-                switch (files[idx].name.substring(5, files[idx].name.indexOf('.'))) {
+                console.log(this.fileArr[idx].name.substring(5, this.fileArr[idx].name.indexOf('.')));
+                switch (this.fileArr[idx].name.substring(5, this.fileArr[idx].name.indexOf('.'))) {
                     case '9':
                         category = this.cate9;
                         break;
@@ -117,8 +124,8 @@ var app = new Vue({
                         return;
                 }
                 /* Form a new file name */
-                var filename = (this.isAddPrefix)? this.prefixContent+files[idx].name : files[idx].name;
-                this.file2Xce(files[idx], filename, category).then(tabJson => {
+                var filename = (this.isAddPrefix)? this.prefixContent+this.fileArr[idx].name : this.fileArr[idx].name;
+                this.file2Xce(this.fileArr[idx], filename, category).then(tabJson => {
                     console.log(tabJson);
                     if (tabJson['data'] && tabJson['data'].length > 0) {
                         /* this line is only needed if you are not adding a script tag reference */
@@ -297,6 +304,29 @@ var app = new Vue({
                 };
                 reader.readAsBinaryString(file);
             });
+        },
+        loadTextFromFile(ev) {
+            const file = ev.target.files[0];
+            console.log("before:"+ev.target.files.length);
+            var notValidFile = "";
+            for (var i = 0 ; i < ev.target.files.length ; i++) {
+                let file = ev.target.files[i],
+                    types = file.name.split('.').pop(),
+                    fileType = ["xlsx", "xlc", "xlm", "xls", "xlt", "xlw", "csv"].some(item => item === types);
+                if (!fileType) {
+                    notValidFile = notValidFile + "\n" + file.name;
+                } else
+                    this.fileArr.push(ev.target.files[i]);
+            }
+            if (notValidFile != "") {
+                alert(notValidFile+"\n cannot be converted.");
+            }
+        },
+        clearFileArr() {
+            this.fileArr = [];
+        },
+        deleteFile(idx) {
+            this.fileArr.splice(idx, 1);
         }
     }
 })
