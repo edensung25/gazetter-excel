@@ -23,7 +23,9 @@ var app = new Vue({
                     '知识青年迁入 Educated Youth - Migration In',
                     '知识青年迁出 Educated Youth - Migration Out',
                     '农转非 (人数) Agricultural to Non-Agricultural Hukou / Change of Residency Status (number of people)',
-                    '农转非 (户数) Agricultural to Non-Agricultural Hukou / Change of Residency Status (number of households)'],
+                    '农转非 (户数) Agricultural to Non-Agricultural Hukou / Change of Residency Status (number of households)',
+                    '迁入 (人数) Migration In (number of people)',
+                    '迁出 (人数) Migration Out (number of people)'],
             cate10: ['入伍 Military Enlistment',
                      '村民纠纷 Number of Civil Mediations',
                      '刑事案件 Number of Reported Crimes',
@@ -47,24 +49,28 @@ var app = new Vue({
                      '粮食总产量 (万斤) Total Grain Output (10K pounds)',
                      '粮食总产量 (吨) Total Grain Output (tons)',
                      '粮食总产量 (万吨) Total Grain Output (10K tons)',
-                     '用电量 - 每人 (度) Village Power Consumption - per person (kilowatt-hours)',
-                     '用电量 - 每户 (度) Village Power Consumption - per household (kilowatt-hours)',
-                     '用电量 - 全村 (度) Village Power Consumption - Village (kilowatt-hours)',
+                     '生活用电量 - 每人 (度) Electricity Consumption - per person (kilowatt hours)',
+                     '生活用电量 - 每户 (度) Electricity Consumption - per household (kilowatt hours)',
+                     '生活用电量 - 全村 (度) Electricity Consumption - village (kilowatt-hours)',
                      '电价 (元每度) Electricity Price - General (yuan per kilowatt-hour)',
                      '电价 - 生活用电 (元每度) Electricity Price - Domestic (yuan per kilowatt-hour)',
                      '电价 - 农业用电 (元每度) Electricity Price - Agricultural (yuan per kilowatt-hour)',
                      '电价 - 工业用电 (元每度) Electricity Price - Industrial (yuan per kilowatt-hour)',
                      '水价 (元每立方米) Water Price (yuan per cubic meter)',
                      '人均收入 (元) Per Capita Income (yuan)',
-                     '人均居住面积 (平方米) Per Capita Living Space (square meters)'],
+                     '人均居住面积 (平方米) Per Capita Living Space (square meters)',
+                     '工业用电量 Industrial Electricity Consumption',
+                     '农业用电量 Agricultural Electricity Consumption'],
             cate12: ['计划生育参与率 Family Planning Program Participation Rate (%)',
                      '领取独生子女证 (人数) Certified Commitment to One Child Policy (number of people)',
                      '育龄妇女人口 Number of Women of Childbearing Age',
-                     '生育率 Total Fertility Rate (‰)',
                      '男性结扎 Vasectomies',
                      '女性结扎 Tubal Ligations',
                      '上环 Use of Intrauterine Device (IUD)',
-                     '绝育手术 Sterilization Surgeries'],
+                     '绝育手术 Sterilization Surgeries',
+                     '节育率 (%) Rate of Contraception (%)',
+                     '结扎总数 Total Number of Vasectomies and Tubal Ligations',
+                     '人工流产 Abortions'],
             cate13: ['在校生 - 小学 Students in School - Elementary School',
                      '在校生 - 初中 Students in School - Junior High School',
                      '在校生 - 高中 Students in School - High School',
@@ -174,6 +180,7 @@ var app = new Vue({
                     var mode = (name.indexOf('Range') > 0) ? 'range' : 'yearly';
                     var yearRange = {'begin': null, 'end': null};
                     var isAvailableCol, categoryCol, codeCol, titleCol;
+                    var bookIdx = {};
                     for (colNum = range.s.c; colNum <= range.e.c; colNum++) {
                         var cell = ws[ XLSX.utils.encode_cell({r: 0, c: colNum}) ];
                         if (cell.w.length == 4 && !isNaN(cell.w)) {
@@ -218,11 +225,20 @@ var app = new Vue({
                             cellCategory = '耕地面积 (公顷) Cultivated Area (hectares)';
                         else if (cellCategory == '上环 Use of Interuterine Device (IUD)')
                             cellCategory = '上环 Use of Intrauterine Device (IUD)';
+                        else if (cellCategory == '用电量 - 每人 (度) Village Power Consumption - per person (kilowatt hours)')
+                            cellCategory = '生活用电量 - 每人 (度) Electricity Consumption - per person (kilowatt hours)';
+                        else if (cellCategory == '用电量 - 每户 (度) Village Power Consumption - per household (kilowatt hours)')
+                            cellCategory = '生活用电量 - 每户 (度) Electricity Consumption - per household (kilowatt hours)';
+                        else if (cellCategory == '用电量 - 全村 (度) Village Power Consumption - Village (kilowatt-hours)')
+                            cellCategory = '生活用电量 - 全村 (度) Electricity Consumption - village (kilowatt-hours)';
 
                         if (groups[cellCode] == null) {
                             groups[cellCode] = new Array();
                         }
                         groups[cellCode].push({'row': rowNum, 'title': cellTitle, 'category': cellCategory});
+                        if (bookIdx[cellCode] == null) {
+                            bookIdx[cellCode] = cellTitle;
+                        }
                     }
 
                     // Compare with the default category list remove unwanted rows and insert non-existed row from default category
@@ -246,16 +262,14 @@ var app = new Vue({
                         console.log("delete:"+ delArr);
                         if (delArr.length > 0 ) {
                             for (var i = delArr.length-1; i >= 0 ; i--) {
+                                console.log(delArr[i]);
                                 delete groups[code][delArr[i]];
                             }
                         }
                         if (tempCate.length > 0) {
                             for (var j = 0; j < tempCate.length; j++) {
-                                groups[code].push({'row': -1, 'title': groups[code][0]['title'], 'category': tempCate[j]});
+                                groups[code].push({'row': -1, 'title': bookIdx[code], 'category': tempCate[j]});
                             }
-                        }
-                        for (variable of groups[code]) {
-                            console.log(JSON.stringify(variable));
                         }
                     }
 
@@ -290,7 +304,8 @@ var app = new Vue({
                             rowContent.length = 0;
                             isAvailable = false;
                         }
-                        console.log("counter: "+counter);
+                        if (counter > cate.length)
+                            console.log("code: " +code+ ", counter: "+counter);
                     }
                     console.log(groups.length);
                     var result = {'data': content, 'filename': name};
