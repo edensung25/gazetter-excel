@@ -25,7 +25,13 @@ var app = new Vue({
                     '农转非 (人数) Agricultural to Non-Agricultural Hukou / Change of Residency Status (number of people)',
                     '农转非 (户数) Agricultural to Non-Agricultural Hukou / Change of Residency Status (number of households)',
                     '迁入 (人数) Migration In (number of people)',
-                    '迁出 (人数) Migration Out (number of people)'],
+                    '迁出 (人数) Migration Out (number of people)',
+                    '视力残疾 Blindness',
+                    '听力语言残疾 Hearing and Speech Disabilities',
+                    '肢体残疾 Amputation and/or Paralysis',
+                    '精神残疾 Mental Disabilities',
+                    '智力残疾 Intellectual Disabilities',
+                    '残疾人总数 Total Disabled Population'],
             cate10: ['入伍 Military Enlistment',
                      '村民纠纷 Number of Civil Mediations',
                      '刑事案件 Number of Reported Crimes',
@@ -90,56 +96,62 @@ var app = new Vue({
                      '智力残疾 Intellectual Disabilities',
                      '残疾人总数 Total Disabled Population'],
             submenu9: {
-                    '户数 Number of Households': {'category':'户数 Number of Household'},
-                    '男性人口 Male Population': {'category':'人口 Population', 'division1': '男性人口 Male Population'},
-                    '女性人口 Female Population': {'category':'人口 Population', 'division1': '女性人口 Female Population'},
-                    '总人口 Total Population': {'category':'人口 Population', 'division1': '总人口 Total Population'},
-                    '出生人数 Number of Births': {'category': '出生人数 Number of Births'},
-                    '自然出生率 Birth Rate (‰)': {'category': '自然出生率 Birth Rate (‰)'},
-                    '死亡人数 Number of Deaths': {'category': '死亡人数 Number of Deaths'},
-                    '死亡率 Death Rate (‰)': {'category': '死亡率 Death Rate (‰)'},
-                    '自然增长率 Natural Population Growth Rate (‰)': {'category': '自然增长率 Natural Population Growth Rate (‰)'},
-                    '流动人口/暂住人口 Migratory/Temporary Population': {'category': '流动人口/暂住人口 Migratory/Temporary Population'},
-                    '迁入 (户数) Migration In (number of households)': {'category': '迁入 Migration In', 'division2':'户数 number of households'},
-                    '迁出 (户数) Migration Out (number of households)': {'category': '迁出 Migration Out', 'division2':'户数 number of households'},
-                    '知识青年迁入 Educated Youth - Migration In': {'category': '迁入 Migration In', 'division2':'知识青年 Educated Youth'},
-                    '知识青年迁出 Educated Youth - Migration Out': {'category': '迁入 Migration In', 'division2':'知识青年 Educated Youth'},
-                    '农转非 (人数) Agricultural to Non-Agricultural Hukou / Change of Residency Status (number of people)':{'category': '农转非 Agricultural to Non-Agricultural Hukou / Change of Residency Status', 'division3':'人数 number of people'},
-                    '农转非 (户数) Agricultural to Non-Agricultural Hukou / Change of Residency Status (number of households)':{'category': '农转非 Agricultural to Non-Agricultural Hukou / Change of Residency Status', 'division3':'户数 number of households'},
-                    '迁入 (人数) Migration In (number of people)': {'category': '迁入 Migration In', 'division2':'人数 number of people'},
-                    '迁出 (人数) Migration Out (number of people)': {'category': '迁出 Migration Out', 'division2':'人数 number of people'},
-                    '迁出 (人数) Migration Out (number of people)': {'category': '迁出 Migration Out', 'division2':'人数 number of people'},
+                '户数 Number of Households': ['户数 Number of Household'],
+                '男性人口 Male Population': ['人口 Population','男性人口 Male Population'],
+                '女性人口 Female Population': ['人口 Population','女性人口 Female Population'],
+                '总人口 Total Population': ['人口 Population','总人口 Total Population'],
+                '出生人数 Number of Births': ['出生人数 Number of Births'],
+                '自然出生率 Birth Rate (‰)': ['自然出生率 Birth Rate (‰)'],
+                '死亡人数 Number of Deaths': ['死亡人数 Number of Deaths'],
+                '死亡率 Death Rate (‰)': ['死亡率 Death Rate (‰)'],
+                '自然增长率 Natural Population Growth Rate (‰)':[ '自然增长率 Natural Population Growth Rate (‰)'],
+                '流动人口/暂住人口 Migratory/Temporary Population': ['流动人口/暂住人口 Migratory/Temporary Population'],
+                '迁入 (户数) Migration In (number of households)': ['迁入 Migration In', ,'','户数 number of households'],
+                '迁出 (户数) Migration Out (number of households)': ['迁出 Migration Out', ,'','户数 number of households'],
+                '知识青年迁入 Educated Youth - Migration In': ['迁入 Migration In', ,'','知识青年 Educated Youth'],
+                '知识青年迁出 Educated Youth - Migration Out': ['迁入 Migration In', ,'','知识青年 Educated Youth'],
+                '农转非 (人数) Agricultural to Non-Agricultural Hukou / Change of Residency Status (number of people)':['农转非 Agricultural to Non-Agricultural Hukou / Change of Residency Status','','','人数 number of people'],
+                '农转非 (户数) Agricultural to Non-Agricultural Hukou / Change of Residency Status (number of households)':['农转非 Agricultural to Non-Agricultural Hukou / Change of Residency Status','','','户数 number of households'],
+                '迁入 (人数) Migration In (number of people)': ['迁入 Migration In', ,'','人数 number of people'],
+                '迁出 (人数) Migration Out (number of people)': ['迁出 Migration Out', ,'','人数 number of people'],
+                '迁出 (人数) Migration Out (number of people)': ['迁出 Migration Out', '','人数 number of people'],
+                '视力残疾 Blindness': ['残疾人数 Disabled Population', '','','','视力残疾 Blindness'],
+                '听力语言残疾 Hearing and Speech Disabilities': ['残疾人数 Disabled Population', '','','','听力语言残疾 Hearing and Speech Disabilities'],
+                '肢体残疾 Amputation and/or Paralysis': ['残疾人数 Disabled Population', '','','','肢体残疾 Amputation and/or Paralysis'],
+                '精神残疾 Mental Disabilities': ['残疾人数 Disabled Population', '','','', '精神残疾 Mental Disabilities'],
+                '智力残疾 Intellectual Disabilities': ['残疾人数 Disabled Population','','','', '智力残疾 Intellectual Disabilities'],
+                '残疾人总数 Total Disabled Population': ['残疾人数 Disabled Population','','','', '残疾人总数 Total Disabled Population'],
             },
             submenu10:{
-                    '入伍 Military Enlistment': {'category':'入伍 Military Enlistment'},
-                    '村民纠纷 Number of Civil Mediations': {'category':'村民纠纷 Number of Civil Mediations'},
-                    '刑事案件 Number of Reported Crimes': {'category':'刑事案件 Number of Reported Crimes'},
-                    '共产党员 - 男 CCP Membership - Male': {'category':'共产党员 CCP Membership', 'division1': '男 Male'},
-                    '共产党员 - 女 CCP Membership - Female': {'category':'共产党员 CCP Membership', 'division1': '女 Female'},
-                    '共产党员 - 总 CCP Membership - Total': {'category':'共产党员 CCP Membership', 'division1': '总 Total'},
-                    '共产党员 - 少数民族 CCP Membership - Ethnic Minorities': {'category':'共产党员 CCP Membership', 'division1': '少数民族 Ethnic Minorities'},
-                    '新党员 - 男 New CCP Membership - Male': {'category':'新党员 New CCP Membership', 'division1': '男 Male'},
-                    '新党员 - 女 New CCP Membership - Female': {'category':'新党员 New CCP Membership', 'division1': '女 Female'},
-                    '新党员 - 总 New CCP Membership - Total': {'category':'新党员 New CCP Membership', 'division1': '总 Total'},
-                    '新党员 - 少数民族 New CCP Membership - Ethnic Minorities': {'category':'新党员 New CCP Membership', 'division1': '少数民族 Ethnic Minorities'},
-                    '阶级成分 - 地主 (户数) Class Status - Landlord (number of households)': {'category':'阶级成分 Class Status', 'division2': '地主 Landlord'},
-                    '阶级成分 - 富农 (户数) Class Status - Rich Peasant (number of households)': {'category':'阶级成分 Class Status', 'division2': '富农 Rich Peasant'},
-                    '阶级成分 - 中农 (户数) Class Status - Middle Peasant (number of households)': {'category':'阶级成分 Class Status', 'division2': '中农 Middle Peasant'},
-                    '阶级成分 - 贫下中农 (户数) Class Status - Poor and Lower Middle Peasant (number of households)': {'category':'阶级成分 Class Status', 'division2': '贫下中农 Poor and Lower Middle Peasant'},
+                '入伍 Military Enlistment': ['入伍 Military Enlistment'],
+                '村民纠纷 Number of Civil Mediations': ['村民纠纷 Number of Civil Mediations'],
+                '刑事案件 Number of Reported Crimes': ['刑事案件 Number of Reported Crimes'],
+                '共产党员 - 男 CCP Membership - Male': ['共产党员 CCP Membership','男 Male'],
+                '共产党员 - 女 CCP Membership - Female': ['共产党员 CCP Membership','女 Female'],
+                '共产党员 - 总 CCP Membership - Total': ['共产党员 CCP Membership','总 Total'],
+                '共产党员 - 少数民族 CCP Membership - Ethnic Minorities': ['共产党员 CCP Membership','少数民族 Ethnic Minorities'],
+                '新党员 - 男 New CCP Membership - Male': ['新党员 New CCP Membership','男 Male'],
+                '新党员 - 女 New CCP Membership - Female': ['新党员 New CCP Membership','女 Female'],
+                '新党员 - 总 New CCP Membership - Total': ['新党员 New CCP Membership','总 Total'],
+                '新党员 - 少数民族 New CCP Membership - Ethnic Minorities': ['新党员 New CCP Membership','少数民族 Ethnic Minorities'],
+                '阶级成分 - 地主 (户数) Class Status - Landlord (number of households)': ['阶级成分 Class Status','','地主 Landlord'],
+                '阶级成分 - 富农 (户数) Class Status - Rich Peasant (number of households)': ['阶级成分 Class Status','','富农 Rich Peasant'],
+                '阶级成分 - 中农 (户数) Class Status - Middle Peasant (number of households)': ['阶级成分 Class Status','','中农 Middle Peasant'],
+                '阶级成分 - 贫下中农 (户数) Class Status - Poor and Lower Middle Peasant (number of households)': ['阶级成分 Class Status','','贫下中农 Poor and Lower Middle Peasant'],
             },
             submenu13:{
-                '在校生 - 小学 Students in School - Elementary School': {'category':'在校生 Students in School', 'division1': '小学 Elementary School'},
-                '在校生 - 初中 Students in School - Junior High School': {'category':'在校生 Students in School', 'division1': '初中 Junior High School'},
-                '在校生 - 高中 Students in School - High School': {'category':'在校生 Students in School', 'division1': '初中 Junior High School'},
-                '新入学生 - 大学 Initial Student Enrollment - College/University': {'category':'新入学生 - 大学 Initial Student Enrollment - College/University'},
-                '老师- 小学 Teachers - Elementary School': {'category':'老师 Teachers', 'division1': '小学 Elementary School'},
-                '老师- 初中 Teachers - Junior High School': {'category':'老师 Teachers', 'division1': '初中 Junior High School'},
-                '老师- 高中 Teachers - High School': {'category':'老师 Teachers', 'division1': '初中 Junior High School'},
-                '受教育程度 - 文盲 Illiterate': {'category':'受教育程度 Highest Level of Education', 'division2': '文盲 Illiterate', 'Subdivision':'人数 number of people'},
-                '受教育程度 - 小学 Highest Level of Education - Elementary School': {'category':'受教育程度 Highest Level of Education', 'division2': '小学 Elementary School', 'Subdivision':'人数 number of people'},
-                '受教育程度 - 初中 Highest Level of Education - Junior High School': {'category':'受教育程度 Highest Level of Education', 'division2': '初中 Junior High School', 'Subdivision':'人数 number of people'},
-                '受教育程度 - 中专高中 Highest Level of Education - High School': {'category':'受教育程度 Highest Level of Education', 'division2': '中专高中 High School', 'Subdivision':'人数 number of people'},
-                '受教育程度 - 大专以上 Highest Level of Education - College/University or Higher': {'category':'受教育程度 Highest Level of Education', 'division2': '大专以上 College/University or Higher', 'Subdivision':'人数 number of people'},
+                '在校生 - 小学 Students in School - Elementary School': ['在校生 Students in School','小学 Elementary School'],
+                '在校生 - 初中 Students in School - Junior High School': ['在校生 Students in School','初中 Junior High School'],
+                '在校生 - 高中 Students in School - High School': ['在校生 Students in School','初中 Junior High School'],
+                '新入学生 - 大学 Initial Student Enrollment - College/University': ['新入学生 - 大学 Initial Student Enrollment - College/University'],
+                '老师- 小学 Teachers - Elementary School': ['老师 Teachers','小学 Elementary School'],
+                '老师- 初中 Teachers - Junior High School': ['老师 Teachers','初中 Junior High School'],
+                '老师- 高中 Teachers - High School': ['老师 Teachers','初中 Junior High School'],
+                '受教育程度 - 文盲 Illiterate': ['受教育程度 Highest Level of Education', '', '文盲 Illiterate', '', '','人数 number of people'],
+                '受教育程度 - 小学 Highest Level of Education - Elementary School': ['受教育程度 Highest Level of Education', '', '小学 Elementary School', '', '','人数 number of people'],
+                '受教育程度 - 初中 Highest Level of Education - Junior High School': ['受教育程度 Highest Level of Education', '', '初中 Junior High School', '', '','人数 number of people'],
+                '受教育程度 - 中专高中 Highest Level of Education - High School': ['受教育程度 Highest Level of Education', '', '中专高中 High School', '', '','人数 number of people'],
+                '受教育程度 - 大专以上 Highest Level of Education - College/University or Higher': ['受教育程度 Highest Level of Education', '', '大专以上 College/University or Higher', '', '','人数 number of people'],
             },
         }
     },
@@ -151,24 +163,30 @@ var app = new Vue({
             }
             for ( idx = 0 ; idx<this.fileArr.length ; idx++ ) {
                 var category;
+                var divisions;
                 console.log(this.fileArr[idx].name.substring(5, this.fileArr[idx].name.indexOf('.')));
-                switch (this.fileArr[idx].name.substring(5, this.fileArr[idx].name.indexOf('.'))) {
-                    case '9':
+                var formNum = parseInt(this.fileArr[idx].name.substring(5, this.fileArr[idx].name.indexOf('.')));
+                switch (formNum) {
+                    case 9:
                         category = this.cate9;
+                        divisions = this.submenu9;
+                        console.log(divisions);
                         break;
-                    case '10':
+                    case 10:
                         category = this.cate10;
+                        divisions = this.submenu10;
                         break;
-                    case '11':
+                    case 11:
                         category = this.cate11;
                         break;
-                    case '12':
+                    case 12:
                         category = this.cate12;
                         break;
-                    case '13':
+                    case 13:
                         category = this.cate13;
+                        divisions = this.submenu13;
                         break;
-                    case '14':
+                    case 14:
                         category = this.cate14;
                         break;
                     default:
@@ -177,7 +195,7 @@ var app = new Vue({
                 }
                 /* Form a new file name */
                 var filename = (this.isAddPrefix)? this.prefixContent+this.fileArr[idx].name : this.fileArr[idx].name;
-                this.file2Xce(this.fileArr[idx], filename, category).then(tabJson => {
+                this.file2Xce(this.fileArr[idx], filename, category, divisions).then(tabJson => {
                     console.log(tabJson);
                     if (tabJson['data'] && tabJson['data'].length > 0) {
                         /* this line is only needed if you are not adding a script tag reference */
@@ -214,7 +232,7 @@ var app = new Vue({
                 }
             });
         },
-        file2Xce(file, name, cate) {
+        file2Xce(file, name, cate, divisions) {
             return new Promise(function (resolve, reject) {
                 let reader = new FileReader();
                 reader.onload = function (e) {
@@ -233,6 +251,7 @@ var app = new Vue({
                     var yearRange = {'begin': null, 'end': null};
                     var isAvailableCol, categoryCol, codeCol, titleCol;
                     var bookIdx = {};
+                    var divisionColNum = {'category':1, 'division1': 1, 'division2': 2, 'division3': 3, 'division4': 4, 'subdivision':5};
                     for (colNum = range.s.c; colNum <= range.e.c; colNum++) {
                         var cell = ws[ XLSX.utils.encode_cell({r: 0, c: colNum}) ];
                         if (cell.w.length == 4 && !isNaN(cell.w)) {
@@ -262,6 +281,13 @@ var app = new Vue({
                     for(colNum  = codeCol; colNum <= yearRange.end; colNum++) {
                         header.push(ws[ XLSX.utils.encode_cell({r: 0, c: colNum}) ]);
                     }
+                    // var divisionHead = ['category', 'division1', 'divisio2', 'division3','division4', 'subdivision'];
+                    // for (var i = 1; i <= divisionHead.length; i++) {
+                    //     ws[ XLSX.utils.encode_cell({r: 0, c: yearRange.end+1})].w = divisionHead[i];
+                    //     var cell = ws[ XLSX.utils.encode_cell({r: 0, c: yearRange.end+1})];
+                    //     cell.w = divisionHead[i];
+                    //     header.push(cell);
+                    // }
                     content.push(header);
 
                     // Rename category and get contents of code, title, category
@@ -350,6 +376,15 @@ var app = new Vue({
                                     rowContent.push('n/a');
                                 }
                             }
+
+                            // Division Data
+                            if (divisions != null) {
+                                for (var i = 0 ; i < divisions[obj['category']].length ; i++) {
+                                    rowContent.push(divisions[obj['category']][i]);
+                                    console.log(divisions[obj['category']][i]);
+                                }
+                            }
+
                             counter++;
                             rowContent.splice(3,0, (isAvailable)?'Yes':'No');
                             content.push(Array.from(rowContent));
