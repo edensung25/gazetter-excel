@@ -109,7 +109,7 @@ var app = new Vue({
                 '迁入 (户数) Migration In (number of households)': ['迁入 Migration In','','户数 number of households'],
                 '迁出 (户数) Migration Out (number of households)': ['迁出 Migration Out','','户数 number of households'],
                 '知识青年迁入 Educated Youth - Migration In': ['迁入 Migration In','','知识青年 Educated Youth'],
-                '知识青年迁出 Educated Youth - Migration Out': ['迁入 Migration In','','知识青年 Educated Youth'],
+                '知识青年迁出 Educated Youth - Migration Out': ['迁出 Migration Out','','知识青年 Educated Youth'],
                 '农转非 (人数) Agricultural to Non-Agricultural Hukou / Change of Residency Status (number of people)':['农转非 Agricultural to Non-Agricultural Hukou / Change of Residency Status','','','人数 number of people'],
                 '农转非 (户数) Agricultural to Non-Agricultural Hukou / Change of Residency Status (number of households)':['农转非 Agricultural to Non-Agricultural Hukou / Change of Residency Status','','','户数 number of households'],
                 '迁入 (人数) Migration In (number of people)': ['迁入 Migration In','','人数 number of people'],
