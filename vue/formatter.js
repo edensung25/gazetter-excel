@@ -139,6 +139,28 @@ var app = new Vue({
                 '阶级成分 - 中农 (户数) Class Status - Middle Peasant (number of households)': ['阶级成分 Class Status','','中农 Middle Peasant'],
                 '阶级成分 - 贫下中农 (户数) Class Status - Poor and Lower Middle Peasant (number of households)': ['阶级成分 Class Status','','贫下中农 Poor and Lower Middle Peasant'],
             },
+            submenu11:{
+                '总产值 (万元) Gross Output Value (10K yuan)':['总产值 Gross Output Value','','','','','万元 10K yuan'],
+                '集体经济收入 (元) Collective Economic Income (yuan)':['集体经济收入 Collective Economic Income','','','','','元 yuan'],
+                '集体经济收入 (万元) Collective Economic Income (10K yuan)':['集体经济收入 Collective Economic Income','','','','','万元 10K yuan'],
+                '耕地面积 (亩) Cultivated Area (mu)':['耕地面积 Cultivated Area','','','','','亩 mu'],
+                '耕地面积 (公顷) Cultivated Area (hectares)':['耕地面积 Cultivated Area','','','','','公顷 hectares'],
+                '粮食总产量 (万斤) Total Grain Output (10K pounds)':['粮食总产量 Total Grain Output','','','','','万斤 10K jin'],
+                '粮食总产量 (吨) Total Grain Output (tons)':['粮食总产量 Total Grain Output','','','','','吨 tons'],
+                '粮食总产量 (万吨) Total Grain Output (10K tons)':['粮食总产量 Total Grain Output','','','','','万吨 10K tons'],
+                '生活用电量 - 每人 (度) Electricity Consumption - per person (kilowatt hours)':['用电量 Electricity Consumption','','','生活 Household','每人 per person','度 kilowatt hours'],
+                '生活用电量 - 每户 (度) Electricity Consumption - per household (kilowatt hours)':['用电量 Electricity Consumption','','','生活 Household','每户 per household','度 kilowatt hours'],
+                '生活用电量 - 全村 (度) Electricity Consumption - village (kilowatt-hours)':['用电量 Electricity Consumption','','','生活 Household','全村 village','度 kilowatt hours'],
+                '电价 (元每度) Electricity Price - General (yuan per kilowatt-hour)':['电价 Electricity Price','','','','','元 yuan'],
+                '电价 - 生活用电 (元每度) Electricity Price - Domestic (yuan per kilowatt-hour)':['电价 Electricity Price','','','生活 Household','','元 yuan'],
+                '电价 - 农业用电 (元每度) Electricity Price - Agricultural (yuan per kilowatt-hour)':['电价 Electricity Price','','','农业 Agricultural','','元 yuan'],
+                '电价 - 工业用电 (元每度) Electricity Price - Industrial (yuan per kilowatt-hour)':['电价 Electricity Price','','','工业 Industrial','','元 yuan'],
+                '水价 (元每立方米) Water Price (yuan per cubic meter)':['水价 Water Price','','','','','元每立方米 yuan per cubic meter'],
+                '人均收入 (元) Per Capita Income (yuan)':['人均收入 Per Capita Income','','','','','元 yuan'],
+                '人均居住面积 (平方米) Per Capita Living Space (square meters)':['人均居住面积 Per Capita Living Space','','','','','立方米 cubic meters'],
+                '工业用电量 Industrial Electricity Consumption':['用电量 Electricity Consumption','','','工业 Industrial','','度 kilowatt hours'],
+                '农业用电量 Agricultural Electricity Consumption':['用电量 Electricity Consumption','','','农业 Agricultural','','度 kilowatt hours']
+            },
             submenu13:{
                 '在校生 - 小学 Students in School - Elementary School': ['在校生 Students in School','小学 Elementary School'],
                 '在校生 - 初中 Students in School - Junior High School': ['在校生 Students in School','初中 Junior High School'],
@@ -178,6 +200,7 @@ var app = new Vue({
                         break;
                     case 11:
                         category = this.cate11;
+                        divisions = this.submenu11;
                         break;
                     case 12:
                         category = this.cate12;
