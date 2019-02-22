@@ -8,6 +8,7 @@ var app = new Vue({
             isAddPrefix: false,
             fileArr: [],
             prefixContent:"",
+            exportOption: 1,
             cate9: ['户数 Number of Households',
                     '男性人口 Male Population',
                     '女性人口 Female Population',
@@ -67,7 +68,7 @@ var app = new Vue({
                      '人均居住面积 (平方米) Per Capita Living Space (square meters)',
                      '工业用电量 Industrial Electricity Consumption',
                      '农业用电量 Agricultural Electricity Consumption'],
-            cate12: ['计划生育参与率 Family Planning Program Participation Rate (%)',
+            cate12: ['计划生育率 (%) Planned Pregnancy Rate (%)',//'计划生育参与率 Family Planning Program Participation Rate (%)',
                      '领取独生子女证 (人数) Certified Commitment to One Child Policy (number of people)',
                      '育龄妇女人口 Number of Women of Childbearing Age',
                      '男性结扎 Vasectomies',
@@ -96,7 +97,7 @@ var app = new Vue({
                      '智力残疾 Intellectual Disabilities',
                      '残疾人总数 Total Disabled Population'],
             submenu9: {
-                '户数 Number of Households': ['户数 Number of Household'],
+                '户数 Number of Households': ['户数 Number of Households'],
                 '男性人口 Male Population': ['人口 Population','男性人口 Male Population'],
                 '女性人口 Female Population': ['人口 Population','女性人口 Female Population'],
                 '总人口 Total Population': ['人口 Population','总人口 Total Population'],
@@ -157,14 +158,14 @@ var app = new Vue({
                 '电价 - 工业用电 (元每度) Electricity Price - Industrial (yuan per kilowatt-hour)':['电价 Electricity Price','','','工业 Industrial','','元 yuan'],
                 '水价 (元每立方米) Water Price (yuan per cubic meter)':['水价 Water Price','','','','','元每立方米 yuan per cubic meter'],
                 '人均收入 (元) Per Capita Income (yuan)':['人均收入 Per Capita Income','','','','','元 yuan'],
-                '人均居住面积 (平方米) Per Capita Living Space (square meters)':['人均居住面积 Per Capita Living Space','','','','','立方米 cubic meters'],
+                '人均居住面积 (平方米) Per Capita Living Space (square meters)':['人均居住面积 Per Capita Living Space','','','','','平方米 square meters'],
                 '工业用电量 Industrial Electricity Consumption':['用电量 Electricity Consumption','','','工业 Industrial','','度 kilowatt hours'],
                 '农业用电量 Agricultural Electricity Consumption':['用电量 Electricity Consumption','','','农业 Agricultural','','度 kilowatt hours']
             },
             submenu13:{
                 '在校生 - 小学 Students in School - Elementary School': ['在校生 Students in School','小学 Elementary School'],
                 '在校生 - 初中 Students in School - Junior High School': ['在校生 Students in School','初中 Junior High School'],
-                '在校生 - 高中 Students in School - High School': ['在校生 Students in School','初中 Junior High School'],
+                '在校生 - 高中 Students in School - High School': ['在校生 Students in School','高中 High School'],
                 '新入学生 - 大学 Initial Student Enrollment - College/University': ['新入学生 - 大学 Initial Student Enrollment - College/University'],
                 '老师- 小学 Teachers - Elementary School': ['老师 Teachers','小学 Elementary School'],
                 '老师- 初中 Teachers - Junior High School': ['老师 Teachers','初中 Junior High School'],
@@ -204,6 +205,7 @@ var app = new Vue({
                         break;
                     case 12:
                         category = this.cate12;
+                        divisions = null;
                         break;
                     case 13:
                         category = this.cate13;
@@ -218,7 +220,7 @@ var app = new Vue({
                 }
                 /* Form a new file name */
                 var filename = (this.isAddPrefix)? this.prefixContent+this.fileArr[idx].name : this.fileArr[idx].name;
-                this.file2Xce(this.fileArr[idx], filename, category, divisions).then(tabJson => {
+                this.file2Xce(this.fileArr[idx], filename, category, divisions, this.exportOption).then(tabJson => {
                     console.log(tabJson);
                     if (tabJson['data'] && tabJson['data'].length > 0) {
                         /* this line is only needed if you are not adding a script tag reference */
@@ -255,7 +257,7 @@ var app = new Vue({
                 }
             });
         },
-        file2Xce(file, name, cate, divisions) {
+        file2Xce(file, name, cate, divisions, exportOption) {
             return new Promise(function (resolve, reject) {
                 let reader = new FileReader();
                 reader.onload = function (e) {
@@ -319,6 +321,7 @@ var app = new Vue({
                         var cellCode = ws[ XLSX.utils.encode_cell({r: rowNum, c: codeCol})].w;
                         var cellTitle = ws[ XLSX.utils.encode_cell({r: rowNum, c: titleCol})].w;
                         var cellCategory = ws[ XLSX.utils.encode_cell({r: rowNum, c: categoryCol})].w;
+                        var cellAvailable = ws[ XLSX.utils.encode_cell({r: rowNum, c: isAvailableCol})];
                         // Rename the category
                         if (cellCategory == '农转非 (人数) Agricultural to Non-Agricultural Hukou (Change of Residency Status) (number of people)')
                             cellCategory = '农转非 (人数) Agricultural to Non-Agricultural Hukou / Change of Residency Status (number of people)';
@@ -332,11 +335,14 @@ var app = new Vue({
                             cellCategory = '生活用电量 - 每户 (度) Electricity Consumption - per household (kilowatt hours)';
                         else if (cellCategory == '用电量 - 全村 (度) Village Power Consumption - Village (kilowatt-hours)')
                             cellCategory = '生活用电量 - 全村 (度) Electricity Consumption - village (kilowatt-hours)';
+                        else if (cellCategory == '计划生育参与率 Family Planning Program Participation Rate (%)')
+                            cellCategory = '计划生育率 (%) Planned Pregnancy Rate (%)';
 
                         if (groups[cellCode] == null) {
                             groups[cellCode] = new Array();
                         }
-                        groups[cellCode].push({'row': rowNum, 'title': cellTitle, 'category': cellCategory});
+                        groups[cellCode].push({'row': rowNum, 'title': cellTitle, 'category': cellCategory, 'isAvailable': (cellAvailable == undefined)?'Yes':cellAvailable.w});
+
                         if (bookIdx[cellCode] == null) {
                             bookIdx[cellCode] = cellTitle;
                         }
@@ -349,7 +355,7 @@ var app = new Vue({
                         for (var i = 0; i < groups[code].length; i++) {
                             var obj = groups[code][i];
                             var index = tempCate.indexOf(obj['category']);
-                            if (index >= 0) {
+                            if (index >= 0 && obj['isAvailable'] == 'Yes') {
                                 tempCate.splice(index, 1);
                             } else if (index == -1 && cate.indexOf(obj['category']) >= 0 && mode == 'range') {
                                 // TOOD: double check here
@@ -389,13 +395,14 @@ var app = new Vue({
                             for(colNum = yearRange.begin; colNum <= yearRange.end; colNum++) {
                                 if (obj['row'] > -1) {
                                     var cell = ws[ XLSX.utils.encode_cell({r: obj['row'], c: colNum}) ];
-                                    if (cell === undefined) {
+                                    if (cell === undefined || isNaN(cell.w)) {
                                         rowContent.push('n/a');
                                     } else {
                                         if (!isAvailable) {isAvailable = true;}
                                         rowContent.push(cell.w);
                                     }
-                                } else {
+                                }
+                                else {
                                     rowContent.push('n/a');
                                 }
                             }
@@ -409,8 +416,12 @@ var app = new Vue({
                             }
 
                             counter++;
-                            rowContent.splice(3,0, (isAvailable)?'Yes':'No');
-                            content.push(Array.from(rowContent));
+                            if (exportOption == 1 && !isAvailable) {
+
+                            } else {
+                                rowContent.splice(3,0, (isAvailable)?'Yes':'No');
+                                content.push(Array.from(rowContent));
+                            }
                             rowContent.length = 0;
                             isAvailable = false;
                         }

@@ -28,7 +28,14 @@
                     </div>
                     <input v-model="prefixContent" type="text" class="form-control" aria-label="Text input with checkbox" placeholder="Enter file name prefix">
                 </div>
-                <button class="btn btn-primary btn-block" v-on:click="exportExcel">Export Files</button>
+                <label for="export-options">Export Options:</label>
+                <div class="" id="export-options" style="margin-top: -18px;">
+                    <input type="radio" id="one" value=0 v-model="exportOption">
+                    <label for="one">All categories</label>
+                    <input type="radio" id="two" value=1 v-model="exportOption">
+                    <label for="two">Only available row</label>
+                </div>
+                <button class="btn btn-primary btn-block" v-on:click="exportExcel" style="margin-top: 18px;">Export Files</button>
             </div>
             <div class="col-md-8 mb-8">
                 <table class="table">
