@@ -8,7 +8,7 @@ var app = new Vue({
             isAddPrefix: false,
             fileArr: [],
             prefixContent:"",
-            exportOption: 1,
+            exportOption: 0,
             cate9: ['户数 Number of Households',
                     '男性人口 Male Population',
                     '女性人口 Female Population',
@@ -187,8 +187,8 @@ var app = new Vue({
             for ( idx = 0 ; idx<this.fileArr.length ; idx++ ) {
                 var category;
                 var divisions;
-                console.log(this.fileArr[idx].name.substring(5, this.fileArr[idx].name.indexOf('.')));
-                var formNum = parseInt(this.fileArr[idx].name.substring(5, this.fileArr[idx].name.indexOf('.')));
+                var arr = this.fileArr[idx].name.split("__");
+                var formNum = parseInt(arr[0]);
                 switch (formNum) {
                     case 9:
                         category = this.cate9;
@@ -267,18 +267,20 @@ var app = new Vue({
                         cellDates:true
                     });
 
+                    var startIndex = 2; // The excel files come with two exmpty rows in the beginning.
                     var ws = this.wb.Sheets[this.wb.SheetNames[0]];
                     var range = XLSX.utils.decode_range(ws['!ref']);
                     var colNum, rowNum;
                     console.log(cate);
                     // Get year range and the 'Is the data available?'
-                    var mode = (name.indexOf('Range') > 0) ? 'range' : 'yearly';
+                    var mode = (name.indexOf('range') > 0) ? 'range' : 'yearly';
                     var yearRange = {'begin': null, 'end': null};
                     var isAvailableCol, categoryCol, codeCol, titleCol;
                     var bookIdx = {};
                     var divisionColNum = {'category':1, 'division1': 1, 'division2': 2, 'division3': 3, 'division4': 4, 'subdivision':5};
                     for (colNum = range.s.c; colNum <= range.e.c; colNum++) {
-                        var cell = ws[ XLSX.utils.encode_cell({r: 0, c: colNum}) ];
+                        var cell = ws[ XLSX.utils.encode_cell({r: startIndex, c: colNum}) ];
+                        console.log(cell);
                         if (cell.w.length == 4 && !isNaN(cell.w)) {
                             if (yearRange.begin == null && yearRange.end == null) {
                                 yearRange.begin = colNum;
@@ -304,7 +306,7 @@ var app = new Vue({
                     var content = new Array();
                     var header = new Array();
                     for(colNum  = codeCol; colNum <= yearRange.end; colNum++) {
-                        header.push(ws[ XLSX.utils.encode_cell({r: 0, c: colNum}) ]);
+                        header.push(ws[ XLSX.utils.encode_cell({r: startIndex, c: colNum}) ]);
                     }
                     // var divisionHead = ['category', 'division1', 'divisio2', 'division3','division4', 'subdivision'];
                     // for (var i = 1; i <= divisionHead.length; i++) {
@@ -313,11 +315,14 @@ var app = new Vue({
                     //     cell.w = divisionHead[i];
                     //     header.push(cell);
                     // }
+                    header.splice(3, 0, 'Is available?');
+                    header.splice(4, 0, 'Category');
+                    console.log(header);
                     content.push(header);
 
                     // Rename category and get contents of code, title, category
                     var groups = {};
-                    for (rowNum = 1; rowNum <= range.e.r; rowNum++) {
+                    for (rowNum = startIndex + 1; rowNum <= range.e.r; rowNum++) {
                         var cellCode = ws[ XLSX.utils.encode_cell({r: rowNum, c: codeCol})].w;
                         var cellTitle = ws[ XLSX.utils.encode_cell({r: rowNum, c: titleCol})].w;
                         var cellCategory = ws[ XLSX.utils.encode_cell({r: rowNum, c: categoryCol})].w;
@@ -392,7 +397,19 @@ var app = new Vue({
                             rowContent.push(obj['title']);
                             rowContent.push(obj['category']);
 
-                            for(colNum = yearRange.begin; colNum <= yearRange.end; colNum++) {
+                            // Division Data
+                            if (divisions != null) {
+                                for (var i = 0 ; i < divisions[obj['category']].length ; i++) {
+                                    rowContent.push(divisions[obj['category']][i]);
+                                    console.log(divisions[obj['category']][i]);
+                                }
+                            }
+                            console.log("After division: "+rowContent);
+                            while(rowContent.length < 8) {
+                              rowContent.push('');
+                            }
+                            // Year information
+                            for(colNum = yearRange.begin+2; colNum <= yearRange.end+2; colNum++) {
                                 if (obj['row'] > -1) {
                                     var cell = ws[ XLSX.utils.encode_cell({r: obj['row'], c: colNum}) ];
                                     if (cell === undefined || isNaN(cell.w)) {
@@ -404,14 +421,6 @@ var app = new Vue({
                                 }
                                 else {
                                     rowContent.push('n/a');
-                                }
-                            }
-
-                            // Division Data
-                            if (divisions != null) {
-                                for (var i = 0 ; i < divisions[obj['category']].length ; i++) {
-                                    rowContent.push(divisions[obj['category']][i]);
-                                    console.log(divisions[obj['category']][i]);
                                 }
                             }
 
