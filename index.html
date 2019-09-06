@@ -28,6 +28,13 @@
                     </div>
                     <input v-model="prefixContent" type="text" class="form-control" aria-label="Text input with checkbox" placeholder="Enter file name prefix">
                 </div>
+                <label for="export-options">Date source:</label>
+                <div class="" id="export-options" style="margin-top: -18px;">
+                    <input type="radio" id="google" value=0 v-model="dataSourceOption">
+                    <label for="one">Google form</label>
+                    <input type="radio" id="drupal" value=1 v-model="dataSourceOption">
+                    <label for="two">Drupal site</label>
+                </div>
                 <label for="export-options">Export Options:</label>
                 <div class="" id="export-options" style="margin-top: -18px;">
                     <input type="radio" id="one" value=0 v-model="exportOption">
@@ -62,6 +69,8 @@
 </body>
 <script src="https://cdn.jsdelivr.net/npm/vue"></script>
 <script src="./dist/js/xlsx.full.min.js"></script>
+<script src="./vue/config_google_form.js"></script>
+<script src="./vue/config_drupal.js"></script>
 <script src="./vue/formatter.js"></script>
 <script type="text/javascript">
     var formatter = new formatter();
