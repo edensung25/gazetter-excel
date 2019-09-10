@@ -143,7 +143,7 @@ var app = new Vue({
                           }
                       } else if (cell.w == "Is the data available?") {
                           isAvailableCol = colNum;
-                      } else if (cell.w == "Start Year") {
+                      } else if (cell.w == "Start Year" || cell.w == "Start Year ") {
                           yearRange.begin = colNum;
                       } else if (cell.w == "Data") {
                           yearRange.end = colNum;
@@ -258,20 +258,25 @@ var app = new Vue({
 
                           // Division Data
                           if (obj["row"] > 0) {
-                            for (var i = divisionRange.begin ; i <= divisionRange.end ; i++) {
-                                // rowContent.push(divisions[obj["category"]][i]);
-                                // console.log(divisions[obj["category"]][i]);
-                                var divisionCell = ws[ XLSX.utils.encode_cell({r: obj["row"], c: i}) ];
-                                if (divisionCell != undefined) {
-                                  rowContent.push(divisionCell.w);
-                                } else {
-                                  rowContent.push("");
-                                }
+                            console.log(divisionRange);
+                            if (divisionRange.begin != null && divisionRange.end != null) {
+                              for (var i = divisionRange.begin ; i <= divisionRange.end ; i++) {
+                                  // rowContent.push(divisions[obj["category"]][i]);
+                                  // console.log(divisions[obj["category"]][i]);
+                                  var divisionCell = ws[ XLSX.utils.encode_cell({r: obj["row"], c: i}) ];
+                                  if (divisionCell != undefined) {
+                                    rowContent.push(divisionCell.w);
+                                  } else {
+                                    rowContent.push("");
+                                  }
 
+                              }
                             }
                           } else {
-                            for (var i = 0; i<divisionRange.end - divisionRange.begin + 1 ; i++) {
-                              rowContent.push(segs[i]);
+                            if (divisionRange.begin != null && divisionRange.end != null) {
+                              for (var i = 0; i<divisionRange.end - divisionRange.begin + 1 ; i++) {
+                                rowContent.push(segs[i+1]);
+                              }
                             }
                           }
 
@@ -442,6 +447,7 @@ var app = new Vue({
                         var rowContent = new Array();
                         var isAvailable = false;
                         for (obj of groups[code]) {
+                          console.log(JSON.stringify(obj));
                             if (obj == undefined) continue;
                             rowContent.push(code);
                             rowContent.push(obj["title"]);
